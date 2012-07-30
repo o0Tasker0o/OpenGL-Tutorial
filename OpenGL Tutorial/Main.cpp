@@ -184,6 +184,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prev, LPSTR cmd, int show)
 			{
 				//Run the OpenGL draw commands
 				g_pGLRenderer->Render();
+				g_pGLRenderer->Update();
 			}
 		}		
 	}

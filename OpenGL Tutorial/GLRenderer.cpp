@@ -1,6 +1,7 @@
 #include "GLRenderer.h"
 
-GLRenderer::GLRenderer(void) : m_hDC(NULL)
+GLRenderer::GLRenderer(void) : m_hDC(NULL),
+							   m_rotation(0.0f)
 {
 }
 
@@ -46,11 +47,12 @@ void GLRenderer::Resize(unsigned int width, unsigned int height)
 	//Reset the projection matrix to an identity matrix
 	glLoadIdentity();
 
-	//Multiply the identity projection matrix by orthographic
+	//Multiply the identity projection matrix by a perspective
 	//matrix with the following parameters
-	glOrtho(0.0, 1.0,	//Left and right clipping planes at 0.0 and 1.0
-			0.0, 1.0,	//Bottom and top clipping planes at 0.0 and 1.0
-			-1.0, 1.0);	//Near and far clipping planes at -1.0 and 1.0
+	gluPerspective(45.0,		//45 degree field of view in the y direction
+				   (double) width / (double) height,	//Aspect ratio
+				   0.1,			//The near clipping plane
+				   20.0);		//The far clipping plane
 
 	//Switch back to using the modelview matrix
 	glMatrixMode(GL_MODELVIEW);
@@ -61,9 +63,22 @@ void GLRenderer::Render()
 	//Clear the colour buffer
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	//Start drawing triangles
-    glBegin(GL_TRIANGLES);
+	//Use the identity modelview matrix
+	glLoadIdentity();
 
+	//Create a lookat matrix (i.e. where the camera is)
+	//from 4 units away in the z axis looking towards 
+	//the origin with the y axis as up
+	gluLookAt(0.0f, 0.0f, 4.0f,	//Eye coordinate
+			0.0f, 0.0f, 0.0f,	//Focus coordinates
+			0.0f, 1.0f, 0.0f);	//Up vector
+
+	//Rotate the modelview matrix by m_rotation degrees in the y axis
+	glRotatef(m_rotation, 0.0f, 1.0f, 0.0f);
+
+	//Start drawing triangles
+	glBegin(GL_TRIANGLES);
+ 
 		glColor3f(1.0f, 0.0f, 0.0f);	//Set the color to red
 		glVertex3f(-1.0f, -1.0f, 0.0f);	//Create the bottom left vertex
 	
@@ -73,8 +88,15 @@ void GLRenderer::Render()
 		glColor3f(0.0f, 0.0f, 1.0f);	//Set the color to blue
 		glVertex3f(1.0f, -1.0f, 0.0f);	//Create the bottom right
 
+	//Stop drawing triangles
 	glEnd();
 
 	//Display the backbuffer
 	SwapBuffers(m_hDC);
+}
+
+void GLRenderer::Update()
+{
+	//Increase the amount of degrees by which to rotate the scene
+	m_rotation += 0.05f;
 }

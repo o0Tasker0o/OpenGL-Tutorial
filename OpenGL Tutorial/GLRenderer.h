@@ -6,6 +6,7 @@
 
 //Graphics library includes
 #include <GL/gl.h>
+#include <GL/glu.h>		//GL Utility functions
 
 class GLRenderer
 {
@@ -16,8 +17,10 @@ class GLRenderer
 	int Initialise(HDC hdc, unsigned int width, unsigned int height);
 	void Resize(unsigned int width, unsigned int height);
 	void Render(void);
+	void Update();
   private:
     HDC m_hDC;
+	float m_rotation;
 };
 
 #endif

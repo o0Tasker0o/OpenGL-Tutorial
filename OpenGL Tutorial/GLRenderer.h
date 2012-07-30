@@ -21,6 +21,7 @@ class GLRenderer
   private:
     HDC m_hDC;
 	float m_rotation;
+	GLuint m_textureID;
 };
 
 #endif

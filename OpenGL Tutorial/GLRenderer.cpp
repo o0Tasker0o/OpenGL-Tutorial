@@ -78,22 +78,7 @@ void GLRenderer::Render()
 
 	//Rotate the modelview matrix by m_rotation degrees in the y axis
 	glRotatef(m_rotation, 0.0f, 1.0f, 0.0f);
-
-	//Start drawing triangles
-	glBegin(GL_TRIANGLES);
- 
-		glColor3f(1.0f, 0.0f, 0.0f);	//Set the color to red
-		glVertex3f(-1.0f, -1.0f, 0.0f);	//Create the bottom left vertex
 	
-		glColor3f(0.0f, 1.0f, 0.0f);	//Set the color to green
-		glVertex3f(0.0f, 1.0f, 0.0f);	//Create the top middle
-	
-		glColor3f(0.0f, 0.0f, 1.0f);	//Set the color to blue
-		glVertex3f(1.0f, -1.0f, 0.0f);	//Create the bottom right
-
-	//Stop drawing triangles
-	glEnd();
-
 	//Start drawing quadrangles
 	glBegin(GL_QUADS);
 
@@ -110,6 +95,30 @@ void GLRenderer::Render()
 	  glVertex3f(0.6f, -0.9f, -1.0f);	//Create the bottom right vertex
 
 	glEnd();
+	
+	//Enable transparency
+	glEnable(GL_BLEND);
+	
+	//Setup the function to use to blend fragments
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	//Start drawing triangles
+	glBegin(GL_TRIANGLES);
+ 
+		glColor4f(1.0f, 0.0f, 0.0f, 0.5f);//Set the color to red
+		glVertex3f(-1.0f, -1.0f, 0.0f);	//Create the bottom left vertex
+	
+		glColor4f(0.0f, 1.0f, 0.0f, 0.5f);//Set the color to green
+		glVertex3f(0.0f, 1.0f, 0.0f);	//Create the top middle
+	
+		glColor4f(0.0f, 0.0f, 1.0f, 0.5f);//Set the color to blue
+		glVertex3f(1.0f, -1.0f, 0.0f);	//Create the bottom right
+
+	//Stop drawing triangles
+	glEnd();
+
+	//Turn off transparency
+	glDisable(GL_BLEND);
 
 	//Display the backbuffer
 	SwapBuffers(m_hDC);

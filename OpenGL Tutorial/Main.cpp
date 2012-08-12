@@ -23,6 +23,22 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT m, WPARAM wp, LPARAM lp)
 	//Check the message code
 	switch(m)
 	{    
+		//If the window is resized
+		case WM_SIZE:
+		{
+			RECT windowRect;
+
+			//Get the dimensions of the inside of the window
+			GetClientRect(hwnd, &windowRect);
+
+			//If the glrenderer has been created
+			if(NULL != g_pGLRenderer)
+			{
+				//Set the OpenGL viewport size to fit the window
+				g_pGLRenderer->Resize(windowRect.right, windowRect.bottom);
+			}
+		}
+		  break;
 		//If the window is sent the close/destroy message
 		case WM_CLOSE:
 		case WM_DESTROY:

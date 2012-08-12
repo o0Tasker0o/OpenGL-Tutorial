@@ -20,6 +20,9 @@ int GLRenderer::Initialise(HDC hdc, unsigned int width, unsigned int height)
 	//Turn on depth testing
 	glEnable(GL_DEPTH_TEST);
 
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+
 	//Set the default cleared buffer colour
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	
@@ -79,38 +82,78 @@ void GLRenderer::Render()
 	//Rotate the modelview matrix by m_rotation degrees in the y axis
 	glRotatef(m_rotation, 0.0f, 1.0f, 0.0f);
 
-	//Start drawing triangles
-	glBegin(GL_TRIANGLES);
- 
-		glColor3f(1.0f, 0.0f, 0.0f);	//Set the color to red
-		glVertex3f(-1.0f, -1.0f, 0.0f);	//Create the bottom left vertex
-	
-		glColor3f(0.0f, 1.0f, 0.0f);	//Set the color to green
-		glVertex3f(0.0f, 1.0f, 0.0f);	//Create the top middle
-	
-		glColor3f(0.0f, 0.0f, 1.0f);	//Set the color to blue
-		glVertex3f(1.0f, -1.0f, 0.0f);	//Create the bottom right
+	//Start drawing the trianglestrip at the back of the cube
+	glBegin(GL_TRIANGLE_STRIP);
+  
+		glNormal3f(0.0f, 0.0f, -1.0f);
+		glVertex3f(-1.0f, -1.0f, -1.0f);
 
-	//Stop drawing triangles
+		glNormal3f(0.0f, 0.0f, -1.0f);
+		glVertex3f(-1.0f, 1.0f, -1.0f);
+
+		glNormal3f(0.0f, 0.0f, -1.0f);
+		glVertex3f(1.0f, -1.0f, -1.0f);
+
+		glNormal3f(0.0f, 0.0f, -1.0f);
+		glVertex3f(1.0f, 1.0f, -1.0f);
+
+	//Stop drawing the trianglestrip
 	glEnd();
+  
+	//Start drawing the trianglestrip at the front of the cube
+	glBegin(GL_TRIANGLE_STRIP);
+  
+		glNormal3f(0.0f, 0.0f, 1.0f);
+		glVertex3f(1.0f, -1.0f, 1.0f);
 
-	//Start drawing quadrangles
-	glBegin(GL_QUADS);
+		glNormal3f(0.0f, 0.0f, 1.0f);
+		glVertex3f(1.0f, 1.0f, 1.0f);
 
-	  glColor3f(0.5f, 0.5f, 0.5f);		//Set the colour to dark grey
-	  glVertex3f(-1.0f, -1.0f, 0.0f);	//Create the bottom left vertex
+		glNormal3f(0.0f, 0.0f, 1.0f);
+		glVertex3f(-1.0f, -1.0f, 1.0f);
 
-	  glColor3f(0.5f, 0.5f, 0.5f);		//Set the colour to dark grey
-	  glVertex3f(-0.8f, 1.0f, 0.0f);	//Create the top left vertex
+		glNormal3f(0.0f, 0.0f, 1.0f);
+		glVertex3f(-1.0f, 1.0f, 1.0f);
 
-	  glColor3f(0.75f, 0.75f, 0.75f);	//Set the colour to light grey
-	  glVertex3f(1.0f, 0.5f, -1.0f);	//Create the top right vertex
-
-	  glColor3f(0.75f, 0.75f, 0.75f);	//Set the colour to light grey
-	  glVertex3f(0.6f, -0.9f, -1.0f);	//Create the bottom right vertex
-
+	//Stop drawing the trianglestrip
 	glEnd();
+  
+	//Start drawing the trianglestrip at the left of the cube
+	glBegin(GL_TRIANGLE_STRIP);
+  
+		glNormal3f(-1.0f, 0.0f, 0.0f);
+		glVertex3f(-1.0f, -1.0f, 1.0f);
+	
+		glNormal3f(-1.0f, 0.0f, 0.0f);
+		glVertex3f(-1.0f, 1.0f, 1.0f);
+	
+		glNormal3f(-1.0f, 0.0f, 0.0f);
+		glVertex3f(-1.0f, -1.0f, -1.0f);
+	
+		glNormal3f(-1.0f, 0.0f, 0.0f);
+		glVertex3f(-1.0f, 1.0f, -1.0f);
 
+	//Stop drawing the trianglestrip
+	glEnd();
+  
+	//Start drawing the trianglestrip at the right of the cube
+	glBegin(GL_TRIANGLE_STRIP);
+  
+		glNormal3f(1.0f, 0.0f, 0.0f);
+		glVertex3f(1.0f, -1.0f, -1.0f);
+	
+		glNormal3f(1.0f, 0.0f, 0.0f);
+		glVertex3f(1.0f, 1.0f, -1.0f);
+	
+		glNormal3f(1.0f, 0.0f, 0.0f);
+		glVertex3f(1.0f, -1.0f, 1.0f);
+	
+		glNormal3f(1.0f, 0.0f, 0.0f);
+		glVertex3f(1.0f, 1.0f, 1.0f);
+
+	//Stop drawing the trianglestrip
+	glEnd();
+	
 	//Display the backbuffer
 	SwapBuffers(m_hDC);
 }
